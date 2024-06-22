@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <matrix.h>
 
 const int WIDTH = 800, HEIGHT = 600;
 
