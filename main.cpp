@@ -9,6 +9,16 @@ int main(int argc, char *argv[])
 
     SDL_Window *window = SDL_CreateWindow("Visualizer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+    SDL_Point cornerOne = {10, 10};
+    SDL_Point cornerTwo = {10, 500};
+    SDL_Point cornerThree = {500, 10};
+    SDL_Point cornerFour = {500, 500};
+
+    SDL_Point Line1[2] = {cornerOne, cornerTwo};
+    SDL_Point Line2[2] = {cornerOne, cornerThree};
+    SDL_Point Line3[2] = {cornerTwo, cornerFour};
+    SDL_Point Line4[2] = {cornerThree, cornerFour};
+
 
     if (NULL == window) 
     {
@@ -32,7 +42,12 @@ int main(int argc, char *argv[])
         SDL_RenderClear(renderer);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderDrawLine(renderer, 10, 10, 10, 500);
+        SDL_RenderDrawLines(renderer, Line1, 2);
+        SDL_RenderDrawLines(renderer, Line2, 2);
+        SDL_RenderDrawLines(renderer, Line3, 2);
+        SDL_RenderDrawLines(renderer, Line4, 2);
+
+
         SDL_RenderPresent(renderer);
     }
 
