@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <cmath>
+#include <fstream>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ using namespace std;
 // Shape vertexes and the fov/focal length of the "camera" 
 const int WIDTH = 800, HEIGHT = 600;
 const int scale = 100;
-const float focalLength = 10.0f;
+const float focalLength = 5.0f;
 
 // Struct of a 2D vector with x,y coordinates
 struct Point2D {
@@ -65,7 +66,7 @@ void addProjectetPoints()
         float pX = (WIDTH / 2) + (point.x * focalLength) / (focalLength + point.z) * scale;
         float pY = (HEIGHT / 2) + (point.y * focalLength) / (focalLength + point.z) * scale;
 
-        // Append projected point to vector
+        // Append projected Point2D to projjection vector
         perspectiveProjection.push_back(Point2D(pX, pY));
     }
 }
@@ -74,6 +75,8 @@ int main(int argc, char *argv[])
 {
     // Setup SDL window and renderer, basic variables following documentation guidelines.
     SDL_Init(SDL_INIT_EVERYTHING);    
+
+    ofstream MyFile("points.txt");
 
     SDL_Window *window = SDL_CreateWindow("Visualizer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
@@ -92,8 +95,6 @@ int main(int argc, char *argv[])
 
     while (true)
     {
-        int cnt = 0;
-
         if (SDL_PollEvent(&windowEvent))
         {
             // Check if event type requested is terminate
@@ -107,18 +108,20 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        addProjectetPoints();
-
         // Set renderer color to white
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-        SDL_RenderPresent(renderer);
+        addProjectetPoints();
+        for (const auto& point : perspectiveProjection) 
+        {
+            SDL_RenderDrawPoint(renderer, point.x, point.y);
+        }
 
-        cnt++;
-        if (cnt > 1000) {break;}
+        SDL_RenderPresent(renderer);
     }
 
     // If code reaches this point while loop is broken by user thus making the runtime succesful
+    MyFile.close();
     SDL_DestroyWindow(window);
     SDL_QUIT;
 
