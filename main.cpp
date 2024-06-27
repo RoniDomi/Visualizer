@@ -2,7 +2,6 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <cmath>
-#include <fstream>
 
 using namespace std;
 
@@ -48,7 +47,16 @@ vector<Point3D> cube =
 };
 
 // Vector that contains all the 2D coordinates of the 3D shape
-vector<Point2D> perspectiveProjection;
+vector<Point2D> projectedPoints;
+
+// Vector of type Edge that contains all the edges between vertices of the cube
+// The ints in the Edge struct, represent the index of the cube vertices
+// as they are listed in the cube vector.
+vector<Edge> cubeEdges =
+{
+    Edge(0, 1), Edge(0, 3), Edge(0, 4), Edge(1, 2), Edge(1, 5), Edge(2, 3), 
+    Edge(2, 6), Edge(3, 7), Edge(4, 5), Edge(4, 7), Edge(5, 6), Edge(6, 7) 
+};
 
 /*
     Calculate the projected x & y value for each point of the shape 
@@ -63,11 +71,25 @@ void addProjectetPoints()
 {
     for (const auto& point : cube)
     {
+        SDL_Point vertex;
         float pX = (WIDTH / 2) + (point.x * focalLength) / (focalLength + point.z) * scale;
         float pY = (HEIGHT / 2) + (point.y * focalLength) / (focalLength + point.z) * scale;
 
         // Append projected Point2D to projjection vector
-        perspectiveProjection.push_back(Point2D(pX, pY));
+        projectedPoints.push_back(Point2D(pX, pY));
+    }
+}
+
+void drawShape(SDL_Renderer *renderer)
+{
+    for (const auto& edge : cubeEdges)
+    {
+        int x1 = projectedPoints[edge.vertexOne].x;
+        int y1 = projectedPoints[edge.vertexOne].y;
+        int x2 = projectedPoints[edge.vertexTwo].x;
+        int y2 = projectedPoints[edge.vertexTwo].y;
+
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
     }
 }
 
@@ -76,8 +98,6 @@ int main(int argc, char *argv[])
     // Setup SDL window and renderer, basic variables following documentation guidelines.
     SDL_Init(SDL_INIT_EVERYTHING);    
 
-    ofstream MyFile("points.txt");
-
     SDL_Window *window = SDL_CreateWindow("Visualizer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
     
@@ -85,7 +105,7 @@ int main(int argc, char *argv[])
     // Return the respective error if program is unable to launch a window
     if (NULL == window) 
     {
-        std::cout << "Could not create window: " << SDL_GetError() << std::endl;
+        cout << "Could not create window: " << SDL_GetError() << endl;
         
         return 1;
     }
@@ -104,7 +124,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        // Set render color to black and reset renderer
+        // Set render color to black and reset background & renderer
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
@@ -112,16 +132,12 @@ int main(int argc, char *argv[])
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
         addProjectetPoints();
-        for (const auto& point : perspectiveProjection) 
-        {
-            SDL_RenderDrawPoint(renderer, point.x, point.y);
-        }
-
-        SDL_RenderPresent(renderer);
+        drawShape(renderer);
+        
+        SDL_RenderPresent(renderer);        
     }
 
-    // If code reaches this point while loop is broken by user thus making the runtime succesful
-    MyFile.close();
+    // If code reaches this point, while loop is broken by user thus making the program exit succesful
     SDL_DestroyWindow(window);
     SDL_QUIT;
 
