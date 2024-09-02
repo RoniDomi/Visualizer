@@ -58,11 +58,8 @@ vector<Edge> cubeEdges =
     Edge(2, 6), Edge(3, 7), Edge(4, 5), Edge(4, 7), Edge(5, 6), Edge(6, 7) 
 };
 
-// Vector that contains all the 2D coordinates of the 3D shapes
-vector<Point2D> projectedPoints;
-
 /*
-    Calculate the projected x & y value for each point of the shape 
+    Calculate the projected x & y value for the given point
     using the formula of weak-perspective projection
 
     Formula for Px/Py = X/Y * Fov / Fov + Z
@@ -79,25 +76,12 @@ Point2D projectPoint(Point3D point)
     return returnPoint;
 }
 
-void drawShape(SDL_Renderer *renderer)
-{
-    for (const auto& edge : cubeEdges)
-    {
-        int x1 = projectedPoints[edge.vertexOne].x;
-        int y1 = projectedPoints[edge.vertexOne].y;
-        int x2 = projectedPoints[edge.vertexTwo].x;
-        int y2 = projectedPoints[edge.vertexTwo].y;
-
-        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-    }
-}
-
 Point3D rotateShapeY(Point3D point) 
 {
     Point3D returnPoint = Point3D(0, 0, 0);
     returnPoint.x = cos(rotation) * point.x - sin(rotation) * point.z;
     returnPoint.y = point.y;
-    returnPoint.z = sin(rotation) * point.x - cos(rotation) * point.z;
+    returnPoint.z = sin(rotation) * point.x + cos(rotation) * point.z;
 
     return returnPoint;
 }
@@ -107,7 +91,7 @@ Point3D rotateShapeX(Point3D point)
     Point3D returnPoint = Point3D(0, 0, 0);
     returnPoint.y = cos(rotation) * point.y - sin(rotation) * point.z;
     returnPoint.x = point.x;
-    returnPoint.z = sin(rotation) * point.y - cos(rotation) * point.z;
+    returnPoint.z = sin(rotation) * point.y + cos(rotation) * point.z;
 
     return returnPoint;
 }
@@ -174,7 +158,7 @@ int main(int argc, char *argv[])
             }
         }
 
-            renderShape(renderer);
+        renderShape(renderer);
 
     }
     // If code reaches this point, while loop is broken by user thus making the program exit succesful
