@@ -46,9 +46,6 @@ vector<Point3D> cube =
     Point3D(-1.0f, -1.0f, -1.0f), Point3D(1.0f, -1.0f, -1.0f), Point3D(1, 1, -1), Point3D(-1.0f, 1.0f, -1.0f) 
 };
 
-// Vector that contains all the 2D coordinates of the 3D shape
-vector<Point2D> projectedPoints;
-
 // Vector of type Edge that contains all the edges between vertices of the cube
 // The ints in the Edge struct, represent the index of the cube vertices
 // as they are listed in the cube vector.
@@ -57,6 +54,9 @@ vector<Edge> cubeEdges =
     Edge(0, 1), Edge(0, 3), Edge(0, 4), Edge(1, 2), Edge(1, 5), Edge(2, 3), 
     Edge(2, 6), Edge(3, 7), Edge(4, 5), Edge(4, 7), Edge(5, 6), Edge(6, 7) 
 };
+
+// Vector that contains all the 2D coordinates of the 3D shapes
+vector<Point2D> projectedPoints;
 
 /*
     Calculate the projected x & y value for each point of the shape 
@@ -91,6 +91,11 @@ void drawShape(SDL_Renderer *renderer)
 
         SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
     }
+}
+
+void rotateShape() 
+{
+
 }
 
 int main(int argc, char *argv[])
