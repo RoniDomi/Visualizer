@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <cmath>
+#include <chrono>
 
 using namespace std;
 
@@ -10,6 +11,8 @@ using namespace std;
 const int WIDTH = 800, HEIGHT = 600;
 const int scale = 100;
 const float focalLength = 5.0f;
+float rotation = 0.0f;
+float DeltaTime = 0.0f;
 
 // Struct of a 2D vector with x,y coordinates
 struct Point2D {
@@ -67,17 +70,13 @@ vector<Point2D> projectedPoints;
     and multiply by scale to increase vertex size for better
     visibility
 */
-void addProjectetPoints()
+Point2D projectPoint(Point3D point)
 {
-    for (const auto& point : cube)
-    {
-        SDL_Point vertex;
-        float pX = (WIDTH / 2) + (point.x * focalLength) / (focalLength + point.z) * scale;
-        float pY = (HEIGHT / 2) + (point.y * focalLength) / (focalLength + point.z) * scale;
+    Point2D returnPoint = Point2D(0, 0);
+    returnPoint.x = (WIDTH / 2) + (point.x * focalLength) / (focalLength + point.z) * scale;
+    returnPoint.y = (HEIGHT / 2) + (point.y * focalLength) / (focalLength + point.z) * scale;
 
-        // Append projected Point2D to projjection vector
-        projectedPoints.push_back(Point2D(pX, pY));
-    }
+    return returnPoint;
 }
 
 void drawShape(SDL_Renderer *renderer)
@@ -93,9 +92,55 @@ void drawShape(SDL_Renderer *renderer)
     }
 }
 
-void rotateShape() 
+Point3D rotateShapeY(Point3D point) 
 {
+    Point3D returnPoint = Point3D(0, 0, 0);
+    returnPoint.x = cos(rotation) * point.x - sin(rotation) * point.z;
+    returnPoint.y = point.y;
+    returnPoint.z = sin(rotation) * point.x - cos(rotation) * point.z;
 
+    return returnPoint;
+}
+
+Point3D rotateShapeX(Point3D point) 
+{
+    Point3D returnPoint = Point3D(0, 0, 0);
+    returnPoint.y = cos(rotation) * point.y - sin(rotation) * point.z;
+    returnPoint.x = point.x;
+    returnPoint.z = sin(rotation) * point.y - cos(rotation) * point.z;
+
+    return returnPoint;
+}
+
+void renderShape(SDL_Renderer *renderer) 
+{
+    auto time1 = chrono::high_resolution_clock::now();
+        chrono::duration<double> duration(0);
+
+        // Set render color to black and reset background & renderer
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+        // Set renderer color to white
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+
+        rotation += 1 * DeltaTime;
+
+        for (auto& edge: cubeEdges) 
+        {
+            Point3D rotatedStartPoint = rotateShapeX(rotateShapeY(cube[edge.vertexOne]));
+            Point3D rotatedEndPoint = rotateShapeX(rotateShapeY(cube[edge.vertexTwo]));
+            Point2D projectedStart = projectPoint(rotatedStartPoint);
+            Point2D projectedEnd = projectPoint(rotatedEndPoint);
+            SDL_RenderDrawLine(renderer, projectedStart.x, projectedStart.y, projectedEnd.x, projectedEnd.y);
+        }
+        
+        SDL_RenderPresent(renderer);        
+
+        auto time2 = chrono::high_resolution_clock::now();
+        duration = time2 - time1;
+        DeltaTime = duration.count();
+        time1 = time2;
 }
 
 int main(int argc, char *argv[])
@@ -129,19 +174,9 @@ int main(int argc, char *argv[])
             }
         }
 
-        // Set render color to black and reset background & renderer
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
+            renderShape(renderer);
 
-        // Set renderer color to white
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-        addProjectetPoints();
-        drawShape(renderer);
-        
-        SDL_RenderPresent(renderer);        
     }
-
     // If code reaches this point, while loop is broken by user thus making the program exit succesful
     SDL_DestroyWindow(window);
     SDL_QUIT;
