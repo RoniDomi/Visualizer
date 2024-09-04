@@ -6,11 +6,15 @@
 
 using namespace std;
 
-// Constant variables such as window dimensions, scale of 
-// Shape vertexes and the fov/focal length of the "camera" 
+/*  
+    Constant variables such as window dimensions, scale of 
+    shape vertexes and the fov/focal length of the "camera" 
+*/
 const int WIDTH = 800, HEIGHT = 600;
 const int scale = 100;
 const float focalLength = 5.0f;
+
+// Rotation base parameters 
 float rotation = 0.0f;
 float DeltaTime = 0.0f;
 
@@ -49,9 +53,11 @@ vector<Point3D> cube =
     Point3D(-1.0f, -1.0f, -1.0f), Point3D(1.0f, -1.0f, -1.0f), Point3D(1, 1, -1), Point3D(-1.0f, 1.0f, -1.0f) 
 };
 
-// Vector of type Edge that contains all the edges between vertices of the cube
-// The ints in the Edge struct, represent the index of the cube vertices
-// as they are listed in the cube vector.
+/* 
+    Vector of type Edge that contains all the edges between vertices of the cube
+     The ints in the Edge struct, represent the index of the cube vertices
+     as they are listed in the cube vector.
+*/ 
 vector<Edge> cubeEdges =
 {
     Edge(0, 1), Edge(0, 3), Edge(0, 4), Edge(1, 2), Edge(1, 5), Edge(2, 3), 
