@@ -3,6 +3,7 @@
 #include <vector>
 #include <cmath>
 #include <chrono>
+#include "shape.h"
 
 using namespace std;
 
@@ -11,12 +12,14 @@ using namespace std;
     shape vertexes and the fov/focal length of the "camera" 
 */
 const int WIDTH = 800, HEIGHT = 600;
+float DeltaTime = 0.0f;
+float rotation = 0.0f;
+
+/*
 const int scale = 100;
 const float focalLength = 5.0f;
 
 // Rotation base parameters 
-float rotation = 0.0f;
-float DeltaTime = 0.0f;
 
 // Struct of a 2D vector with x,y coordinates
 struct Point2D {
@@ -58,6 +61,8 @@ vector<Point3D> cube =
      The ints in the Edge struct, represent the index of the cube vertices
      as they are listed in the cube vector.
 */ 
+/* 
+
 vector<Edge> cubeEdges =
 {
     Edge(0, 1), Edge(0, 3), Edge(0, 4), Edge(1, 2), Edge(1, 5), Edge(2, 3), 
@@ -73,6 +78,7 @@ vector<Edge> cubeEdges =
     and multiply by scale to increase vertex size for better
     visibility
 */
+/* 
 Point2D projectPoint(Point3D point)
 {
     Point2D returnPoint = Point2D(0, 0);
@@ -101,8 +107,9 @@ Point3D rotateShapeX(Point3D point)
 
     return returnPoint;
 }
+*/
 
-void renderShape(SDL_Renderer *renderer) 
+void renderShape(SDL_Renderer *renderer, Shape shape) 
 {
     auto time1 = chrono::high_resolution_clock::now();
         chrono::duration<double> duration(0);
@@ -140,6 +147,7 @@ int main(int argc, char *argv[])
 
     SDL_Window *window = SDL_CreateWindow("Visualizer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
+    Shape cube = Shape(0);
     
 
     // Return the respective error if program is unable to launch a window
@@ -164,7 +172,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        renderShape(renderer);
+        renderShape(renderer, cube);
 
     }
     // If code reaches this point, while loop is broken by user thus making the program exit succesful
