@@ -1,9 +1,22 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-struct Point2D;
-struct Point3D;
-struct Edge;
+struct Point2D
+{
+    float x;
+    float y;
+};
+struct Point3D
+{
+    float x;
+    float y;
+    float z;
+};
+struct Edge
+{
+    int vertexOne;
+    int vertexTwo;
+};
 
 class Shape
 {

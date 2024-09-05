@@ -94,7 +94,7 @@ class Shape
         return returnPoint;
     }
 
-    // Returns the 3D point after it has been returned in the rotation angle in the x axis.
+    // Returns the 3D point after it has been returned in the rotation angle in the  axis.
     // Rotation done through matrix multiplication
     Point3D rotateShapeX(Point3D point, float rotation) 
     {

@@ -123,9 +123,9 @@ void renderShape(SDL_Renderer *renderer, Shape shape)
 
         rotation += 1 * DeltaTime;
 
-        for (auto& edge: cubeEdges) 
+        for (auto& edge: ) 
         {
-            Point3D rotatedStartPoint = rotateShapeX(rotateShapeY(cube[edge.vertexOne]));
+            rotatedStartPoint = rotateShapeX(rotateShapeY(cube[edge.vertexOne]));
             Point3D rotatedEndPoint = rotateShapeX(rotateShapeY(cube[edge.vertexTwo]));
             Point2D projectedStart = projectPoint(rotatedStartPoint);
             Point2D projectedEnd = projectPoint(rotatedEndPoint);
