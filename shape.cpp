@@ -46,31 +46,6 @@ class Shape
     // Default constructor
     Shape() {}
 
-    // Constructor based on called shape type
-    /*
-        Shapes:
-        0 -> Cube
-    */
-    Shape(int shapeType) 
-    {
-        switch(shapeType) 
-        {
-            // Cube
-            case 0:
-                this->vertices = 
-                {
-                    Point3D(-1.0f, -1.0f, 1.0f), Point3D(1.0f, -1.0f, 1.0f), Point3D(1.0f, 1.0f, 1.0f), Point3D(-1.0f, 1.0f, 1.0f), 
-                    Point3D(-1.0f, -1.0f, -1.0f), Point3D(1.0f, -1.0f, -1.0f), Point3D(1, 1, -1), Point3D(-1.0f, 1.0f, -1.0f) 
-                };
-                this->edges = 
-                {
-                    Edge(0, 1), Edge(0, 3), Edge(0, 4), Edge(1, 2), Edge(1, 5), Edge(2, 3), 
-                    Edge(2, 6), Edge(3, 7), Edge(4, 5), Edge(4, 7), Edge(5, 6), Edge(6, 7) 
-                };
-                break;
-        }
-    }
-
     // Transform a 3D point into a 2D one through weak-perspective projection.
     // Formula: Px/Py = X/Y * Fov / Fov + Z
     Point2D projectPoint(Point3D point)
