@@ -15,6 +15,13 @@ const int WIDTH = 800, HEIGHT = 600;
 float DeltaTime = 0.0f;
 float rotation = 0.0f;
 
+// Available shapes
+vector<Point3D> cubeVertex = 
+{
+    Point3D(-1.0f, -1.0f, 1.0f), Point3D(1.0f, -1.0f, 1.0f), Point3D(1.0f, 1.0f, 1.0f), Point3D(-1.0f, 1.0f, 1.0f), 
+    Point3D(-1.0f, -1.0f, -1.0f), Point3D(1.0f, -1.0f, -1.0f), Point3D(1, 1, -1), Point3D(-1.0f, 1.0f, -1.0f) 
+};
+
 class Window{
     public: 
         Window() 
@@ -53,7 +60,7 @@ class Window{
                 time1 = time2;
         }
 
-        c
+        int createWindow() 
         {
             // Setup SDL window and renderer, basic variables following documentation guidelines.
             SDL_Init(SDL_INIT_EVERYTHING);    
